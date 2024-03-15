@@ -1,10 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ClassSchedule.Models;
+using ClassSchedule.Models.DataLayer;
 
 namespace ClassSchedule.Controllers
 {
     public class HomeController : Controller
     {
+        private ClassScheduleUnitOfWork data { get; set; }
+        public HomeController(ClassScheduleUnitOfWork ctx) =>
+            data = ctx;
         private Repository<Class> classes { get; set; }
         private Repository<Day> days { get; set; }
 
