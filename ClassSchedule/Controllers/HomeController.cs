@@ -31,6 +31,7 @@ namespace ClassSchedule.Controllers
             // order by Day if no filter. Otherwise, filter by day and order by time.
             if (id == 0) {
                 classOptions.OrderBy = c => c.DayId;
+                classOptions.ThenOrderBy = c => c.MilitaryTime;
             }
             else {
                 classOptions.Where = c => c.DayId == id;

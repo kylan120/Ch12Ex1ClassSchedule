@@ -8,6 +8,7 @@ namespace ClassSchedule.Models
         // public properties for sorting and filtering
         public Expression<Func<T, Object>> OrderBy { get; set; }
         public Expression<Func<T, bool>> Where { get; set; }
+        public Expression<Func<T, Object>> ThenOrderBy { get; set; }
 
         // private string array for include statements
         private string[] includes;
@@ -23,6 +24,8 @@ namespace ClassSchedule.Models
         // read-only properties 
         public bool HasWhere => Where != null;
         public bool HasOrderBy => OrderBy != null;
+       
+        public bool HasThenOrderBy => OrderBy != null;
     }
 
 }
