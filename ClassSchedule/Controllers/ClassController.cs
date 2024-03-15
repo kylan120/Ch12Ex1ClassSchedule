@@ -75,14 +75,12 @@ namespace ClassSchedule.Controllers
         // private helper methods
         private Class GetClass(int id)
         {
-            var classOptions = new QueryOptions<Class> {
+            var classOptions = new QueryOptions<Class>
+            {
                 Includes = "Teacher, Day",
                 Where = c => c.ClassId == id
             };
-            var list = classes.List(classOptions);
-
-            // return first Class or blank Class if null
-            return list.FirstOrDefault();
+            return data.Class.Get(classOptions);
         }
         private void LoadViewBag(string operation)
         {

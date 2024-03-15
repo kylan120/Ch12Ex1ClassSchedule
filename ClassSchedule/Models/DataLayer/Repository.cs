@@ -36,6 +36,19 @@ namespace ClassSchedule.Models
             }
             return query.ToList();
         }
+       
+
+        public virtual T Get(QueryOptions<T> options)
+        {
+            IQueryable<T> query = dbset;
+            foreach (string include in options.GetIncludes())
+            {
+                query = query.Include(include);
+            }
+            if (options.HasWhere)
+                query = query.Where(options.Where);
+            return query.FirstOrDefault();
+        }
 
         public virtual T Get(int id) => dbset.Find(id);
         public virtual void Insert(T entity) => dbset.Add(entity);
