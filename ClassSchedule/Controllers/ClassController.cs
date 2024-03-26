@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using ClassSchedule.Models;
-using ClassSchedule.Models.DataLayer;
+
 
 namespace ClassSchedule.Controllers
 {
@@ -10,15 +10,12 @@ namespace ClassSchedule.Controllers
         private ClassScheduleUnitOfWork data {  get; set; }
         public ClassController(ClassScheduleUnitOfWork ctx) => 
             data = ctx;
-        private Repository<Class> classes { get; set; }
-        private Repository<Teacher> teachers { get; set; }
-        private Repository<Day> days { get; set; }
+      
 
         public ClassController(ClassScheduleContext ctx)
         {
-            classes = new Repository<Class>(ctx);
-            teachers = new Repository<Teacher>(ctx);
-            days = new Repository<Day>(ctx);
+            
+            data = new ClassScheduleUnitOfWork(ctx);
         }
 
         public RedirectToActionResult Index() => RedirectToAction("Index", "Home");
@@ -44,10 +41,10 @@ namespace ClassSchedule.Controllers
         {
             if (ModelState.IsValid) {
                 if (c.ClassId == 0)
-                    classes.Insert(c);
+                    data.Classes.Insert(c);
                 else
-                    classes.Update(c);
-                classes.Save();
+                    data.Classes.Update(c);
+                data.Classes.Save();
                 return RedirectToAction("Index", "Home");
             }
             else {
@@ -67,8 +64,8 @@ namespace ClassSchedule.Controllers
         [HttpPost]
         public RedirectToActionResult Delete(Class c)
         {
-            classes.Delete(c);
-            classes.Save();
+            data.Classes.Delete(c);
+            data.Classes.Save();
             return RedirectToAction("Index", "Home");
         }
 
@@ -80,14 +77,14 @@ namespace ClassSchedule.Controllers
                 Includes = "Teacher, Day",
                 Where = c => c.ClassId == id
             };
-            return data.Class.Get(classOptions);
+            return data.Classes.Get(classOptions);
         }
         private void LoadViewBag(string operation)
         {
-            ViewBag.Days = days.List(new QueryOptions<Day> {
+            ViewBag.Days = data.Days.List(new QueryOptions<Day> {
                 OrderBy = d => d.DayId
             });
-            ViewBag.Teachers = teachers.List(new QueryOptions<Teacher> {
+            ViewBag.Teachers = data.Teachers.List(new QueryOptions<Teacher> {
                 OrderBy = t => t.LastName
             });
             ViewBag.Operation = operation;

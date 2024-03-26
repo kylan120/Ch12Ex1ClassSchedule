@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ClassSchedule.Models;
-using ClassSchedule.Models.DataLayer;
+
 
 namespace ClassSchedule.Controllers
 {
@@ -9,12 +9,11 @@ namespace ClassSchedule.Controllers
         private ClassScheduleUnitOfWork data { get; set; }
         public HomeController(ClassScheduleUnitOfWork ctx) =>
             data = ctx;
-        private Repository<Class> classes { get; set; }
-        private Repository<Day> days { get; set; }
+    
 
         public HomeController(ClassScheduleContext ctx) {
-            classes = new Repository<Class>(ctx);
-            days = new Repository<Day>(ctx);
+            data = new ClassScheduleUnitOfWork(ctx);
+          
         }
 
         public ViewResult Index(int id)
@@ -39,8 +38,8 @@ namespace ClassSchedule.Controllers
             }
 
             // execute queries
-            ViewBag.Days = days.List(dayOptions);
-            return View(classes.List(classOptions));
+            ViewBag.Days = data.Days.List(dayOptions);
+            return View(data.Classes.List(classOptions));
         }
     }
 }

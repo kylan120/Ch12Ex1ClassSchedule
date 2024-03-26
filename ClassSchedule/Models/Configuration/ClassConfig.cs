@@ -19,6 +19,7 @@ namespace ClassSchedule.Models
                new Class { ClassId = 9, Title = "Nonviolence and Social Change", Number = 101, TeacherId = 3, DayId = 4, MilitaryTime = "1400" },
                new Class { ClassId = 10, Title = "Nonviolence and Social Change", Number = 201, TeacherId = 3, DayId = 5, MilitaryTime = "1400" }
             );
+            entity.HasOne(t => t.Teacher).WithMany(t => t.Classes).OnDelete(DeleteBehavior.Restrict);
         }
     }
 

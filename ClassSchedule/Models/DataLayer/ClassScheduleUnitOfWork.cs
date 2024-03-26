@@ -2,47 +2,59 @@
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
-namespace ClassSchedule.Models.DataLayer
+namespace ClassSchedule.Models
 {
-    public class ClassScheduleUnitOfWork
+    public class ClassScheduleUnitOfWork : IClassScheduleUnitOfWork
     {
         private ClassScheduleContext context {  get; set; }
-
-        public ClassScheduleUnitOfWork(ClassScheduleContext ctx) => context = ctx;
-
-        private Repository<Class> classData;
-        public Repository<Class> Class
+        public ClassScheduleUnitOfWork(ClassScheduleContext context)
         {
-            get{
-                if (classData == null)
-                    classData = new Repository<Class>(context);
-                return classData;
-            }
+            this.context = context;
         }
 
-        private Repository<Teacher> teacherData;
-        public Repository<Teacher> Teacher
+        private Repository<Teacher> TeacherData {  get; set; }
+        public Repository<Teacher> Teachers 
         {
             get
             {
-                if (teacherData == null)
-                    teacherData = new Repository<Teacher>(context);
-                return teacherData;
+                if (TeacherData == null)
+                {
+                    TeacherData = new Repository<Teacher>(context);
+                }
+                return TeacherData;
             }
         }
-
-        private Repository<Day> dayData;
-        public Repository<Day> Day
+        private Repository<Class> ClassData { get; set; }
+        public Repository<Class> Classes
         {
             get
             {
-                if (dayData == null)
-                    dayData = new Repository<Day>(context);
-                return dayData;
+                if (ClassData == null)
+                {
+                    ClassData = new Repository<Class>(context);
+                }
+                return ClassData;
+            }
+        }
+        private Repository<Day> DayData { get; set; }
+        public Repository<Day> Days
+        {
+            get
+            {
+                if (DayData == null)
+                {
+                    DayData = new Repository<Day>(context);
+                }
+                return DayData;
             }
         }
 
-        public void Save() => context.SaveChanges();
+
+        public void Save()
+        {
+            context.SaveChanges();
+        }
+
 
     }
 }
